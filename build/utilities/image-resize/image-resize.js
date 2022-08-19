@@ -12,48 +12,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const image_type_1 = __importDefault(require("image-type"));
-const read_chunk_1 = require("read-chunk");
+const sharp_1 = __importDefault(require("sharp"));
 const path_1 = __importDefault(require("path"));
-const getImageNameAndType = (request, srcDirPath) => __awaiter(void 0, void 0, void 0, function* () {
-    let buffer;
-    let ext = undefined;
-    // change image name to buffer
-    buffer = yield (0, read_chunk_1.readChunk)(path_1.default.join(srcDirPath, request.imageName), {
-        length: 3,
-        startPosition: 1,
-    }).catch((error) => {
-        // If img is not found
-        return Promise.reject(error);
-    });
-    // get image extension
-    yield (0, image_type_1.default)(buffer)
-        .then((value) => {
-        if (value !== undefined) {
-            ext = value.ext;
-        }
-        else {
-            // src file is not image
-            return Promise.reject('File extension not image type');
-        }
-    })
-        .catch((reason) => {
-        return Promise.reject(reason);
-    });
-    const nameSplitArray = request.imageName.split('.');
+const getImageName = (imageName) => {
     let imageNameWithoutExt = '';
-    // get name without extension
-    nameSplitArray.forEach((value, index) => {
-        if (index != nameSplitArray.length - 1) {
-            imageNameWithoutExt += value;
+    let tempNameSplitArray = imageName.split('.');
+    tempNameSplitArray.forEach((value, index) => {
+        if (index !== tempNameSplitArray.length - 1) {
+            // If the index !== 0, then add a '.' string back to the name
+            imageNameWithoutExt += (index !== 0 ? '.' : '') + value;
         }
     });
-    return Promise.resolve({
-        name: imageNameWithoutExt,
-        type: ext,
-    });
+    return imageNameWithoutExt;
+};
+const resizeImage = (request, pathDetail) => __awaiter(void 0, void 0, void 0, function* () {
+    const resultPromise = new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
+        const originalImageName = getImageName(request.filename);
+        const resizedImageName = `thump_${originalImageName}.png`;
+        const originalImagePath = path_1.default.join(pathDetail.srcDir, request.filename);
+        const resizedImagePath = path_1.default.join(pathDetail.outDir, resizedImageName);
+        yield (0, sharp_1.default)(originalImagePath)
+            .resize(request.width, request.height)
+            .png()
+            .toFile(resizedImagePath)
+            .then((value) => {
+            resolve({
+                resizeImagePath: pathDetail.outDir,
+                resizeImageName: resizedImageName,
+                sharpOutputInfo: value,
+            });
+        })
+            .catch((error) => {
+            reject(error);
+        });
+    }));
+    return resultPromise;
 });
-const imageResize = (request) => __awaiter(void 0, void 0, void 0, function* () { });
 exports.default = {
-    getImageNameAndType,
+    getImageName,
+    resizeImage,
 };

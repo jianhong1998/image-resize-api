@@ -15,15 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const image_resize_1 = __importDefault(require("../image-resize/image-resize"));
 const router = (0, express_1.Router)();
-router.get('/images', (req, res) => {
-    res.send('<h1>api/images Access Successful</h1>');
+router.get('/', (req, res) => {
+    res.send('<h1>GET api/ successful</h1>');
 });
-router.get('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const ext = yield image_resize_1.default
-        .getImageNameAndType({ imageName: 'anya.jpg', height: 400, width: 400 }, './assets/image_src/full')
+router.get('/images', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const pathDetails = {
+        srcDir: './assets/images_src/full',
+        outDir: './assets/images_src/thump',
+    };
+    if (req.query.filename === undefined ||
+        req.query.height === undefined ||
+        req.query.width === undefined) {
+        res.send('<h1 style="color: red">filename, height, width are required in the GET request</h1>');
+        return;
+    }
+    const imageRequest = {
+        filename: req.query.filename,
+        height: parseInt(req.query.height),
+        width: parseInt(req.query.width),
+    };
+    yield image_resize_1.default
+        .resizeImage(imageRequest, pathDetails)
+        .then((result) => {
+        const option = {
+            root: result.resizeImagePath,
+        };
+        res.sendFile(result.resizeImageName, option);
+    })
         .catch((error) => {
-        console.error(error);
+        res.status(404).send(`<h1 style="color: red">${error}</h1>`);
     });
-    res.send(ext);
 }));
 exports.default = router;
