@@ -8,15 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const server_1 = __importDefault(require("./utilities/server/server"));
-const image_resize_1 = __importDefault(require("./utilities/image-resize/image-resize"));
-server_1.default;
-server_1.default.get('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const imageFullName = 'anya.jpg';
-    const imageName = image_resize_1.default.getImageName(imageFullName);
-    res.send(`<h1>${imageName}</h1>`);
-}));
+const function1 = () => __awaiter(void 0, void 0, void 0, function* () {
+    return Promise.resolve('It is working');
+});
+exports.default = function1;
