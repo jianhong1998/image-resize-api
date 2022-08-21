@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const image_resize_1 = __importDefault(require("../image-resize/image-resize"));
+const imageResize_1 = __importDefault(require("../image-resize/imageResize"));
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => {
     res.send('<h1>GET api/ successful</h1>');
@@ -40,7 +40,7 @@ router.get('/images', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.send('<h1 style="color: red">height and width must be greater than 0</h1>');
         return;
     }
-    yield image_resize_1.default
+    yield imageResize_1.default
         .resizeImage(imageRequest, pathDetails)
         .then((result) => {
         const option = {
