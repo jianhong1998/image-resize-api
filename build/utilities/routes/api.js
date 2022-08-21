@@ -23,6 +23,7 @@ router.get('/images', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         srcDir: './assets/images_src/full',
         outDir: './assets/images_src/thump',
     };
+    // Check if any value is missing in GET Request
     if (req.query.filename === undefined ||
         req.query.height === undefined ||
         req.query.width === undefined) {
@@ -34,6 +35,11 @@ router.get('/images', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         height: parseInt(req.query.height),
         width: parseInt(req.query.width),
     };
+    // Check if any value smaller than 0
+    if (imageRequest.height <= 0 || imageRequest.width <= 0) {
+        res.send('<h1 style="color: red">height and width must be greater than 0</h1>');
+        return;
+    }
     yield image_resize_1.default
         .resizeImage(imageRequest, pathDetails)
         .then((result) => {
