@@ -7,7 +7,9 @@
     "build": "npx tsc",
     "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "app": "npx nodemon",
-    "start": "npm run prettier && npm run build && npm run app"
+    "start": "npm run prettier && npm run build && npm run app",
+    "jasmine": "jasmine",
+    "test": "npm run prettier && npm run build && npm run jasmine"
   },
   "keywords": [],
   "author": "JianHong LEE",
