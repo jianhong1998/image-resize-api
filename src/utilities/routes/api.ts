@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import imageResize from '../image-resize/image-resize';
+import imageResize from '../image-resize/imageResize';
 
 const router = Router();
 
@@ -13,6 +13,7 @@ router.get('/images', async (req, res) => {
         outDir: './assets/images_src/thump',
     };
 
+    // Check if any value is missing in GET Request
     if (
         req.query.filename === undefined ||
         req.query.height === undefined ||
@@ -29,6 +30,14 @@ router.get('/images', async (req, res) => {
         height: parseInt(req.query.height as string),
         width: parseInt(req.query.width as string),
     };
+
+    // Check if any value smaller than 0
+    if (imageRequest.height <= 0 || imageRequest.width <= 0) {
+        res.send(
+            '<h1 style="color: red">height and width must be greater than 0</h1>'
+        );
+        return;
+    }
 
     await imageResize
         .resizeImage(imageRequest, pathDetails)

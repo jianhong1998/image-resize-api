@@ -40,11 +40,18 @@ const resizeImage = async (
     request: { filename: string; height: number; width: number },
     pathDetail: { srcDir: string; outDir: string }
 ) => {
+    // start resizeImage()
     const resultPromise = new Promise<{
         resizeImagePath: string;
         resizeImageName: string;
         sharpOutputInfo: sharp.OutputInfo;
     }>(async (resolve, reject) => {
+        // Check if the input width and height are valid
+        if (request.height <= 0 || request.width <= 0) {
+            reject('height and width must be greater than 0');
+            return;
+        }
+
         const originalImageName = getImageName(request.filename);
         const resizedImageName = `thump_${originalImageName}.png`;
 
