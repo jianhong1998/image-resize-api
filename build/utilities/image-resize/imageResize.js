@@ -14,7 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sharp_1 = __importDefault(require("sharp"));
 const path_1 = __importDefault(require("path"));
+
 const fs_1 = __importDefault(require("fs"));
+
 const getImageName = (imageName) => {
     let imageNameWithoutExt = '';
     let tempNameSplitArray = imageName.split('.');
@@ -26,6 +28,7 @@ const getImageName = (imageName) => {
     });
     return imageNameWithoutExt;
 };
+
 const checkIsImageExist = (imagePath, imageName) => __awaiter(void 0, void 0, void 0, function* () {
     const promise = new Promise((resolve, reject) => {
         const pathWithName = path_1.default.join(imagePath, imageName);
@@ -44,6 +47,8 @@ const resizeImage = (request, pathDetail) => __awaiter(void 0, void 0, void 0, f
     // start resizeImage()
     const resultPromise = new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
         // Check if the input width and height are valid
+
+
         if (request.height <= 0 || request.width <= 0) {
             reject('height and width must be greater than 0');
             return;

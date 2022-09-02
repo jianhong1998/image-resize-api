@@ -1,5 +1,6 @@
 import sharp from 'sharp';
 import path from 'path';
+
 import fs from 'fs';
 
 const getImageName = (imageName: string) => {
@@ -16,6 +17,7 @@ const getImageName = (imageName: string) => {
 
     return imageNameWithoutExt;
 };
+
 
 const checkIsImageExist = async (
     imagePath: string,
@@ -45,7 +47,9 @@ const resizeImage = async (
         resizeImagePath: string;
         resizeImageName: string;
         sharpOutputInfo: sharp.OutputInfo;
+
     }>(async (resolve, reject) => {
+
         // Check if the input width and height are valid
         if (request.height <= 0 || request.width <= 0) {
             reject('height and width must be greater than 0');

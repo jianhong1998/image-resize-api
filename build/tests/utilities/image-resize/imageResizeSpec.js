@@ -30,6 +30,8 @@ describe('Test resizeImage() function', () => {
     }));
     it('input not exist file name should return a rejected promise', () => __awaiter(void 0, void 0, void 0, function* () {
         yield expectAsync(imageResize_1.default.resizeImage({ filename: 'anya1.jpg', height: 1000, width: 1000 }, {
+
+
             srcDir: './assets/images_src/full',
             outDir: './assets/images_src/thump',
         })).toBeRejected();
