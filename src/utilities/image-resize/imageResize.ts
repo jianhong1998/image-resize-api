@@ -1,6 +1,8 @@
 import sharp from 'sharp';
 import path from 'path';
 
+import fs from 'fs';
+
 const getImageName = (imageName: string) => {
     let imageNameWithoutExt = '';
 
@@ -16,6 +18,26 @@ const getImageName = (imageName: string) => {
     return imageNameWithoutExt;
 };
 
+
+const checkIsImageExist = async (
+    imagePath: string,
+    imageName: string
+): Promise<boolean> => {
+    const promise = new Promise<boolean>((resolve, reject) => {
+        const pathWithName = path.join(imagePath, imageName);
+
+        fs.open(pathWithName, (err, fd) => {
+            if (err) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+
+    return promise;
+};
+
 const resizeImage = async (
     request: { filename: string; height: number; width: number },
     pathDetail: { srcDir: string; outDir: string }
@@ -25,15 +47,15 @@ const resizeImage = async (
         resizeImagePath: string;
         resizeImageName: string;
         sharpOutputInfo: sharp.OutputInfo;
-    }> (async (resolve, reject) => {
-        
+
+    }>(async (resolve, reject) => {
+
         // Check if the input width and height are valid
         if (request.height <= 0 || request.width <= 0) {
             reject('height and width must be greater than 0');
             return;
         }
 
-        
         const originalImageName = getImageName(request.filename);
         const resizedImageName = `thump_${originalImageName}.png`;
 
