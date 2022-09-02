@@ -1,5 +1,6 @@
 import sharp from 'sharp';
 import path from 'path';
+import fs from 'fs';
 
 const getImageName = (imageName: string) => {
     let imageNameWithoutExt = '';
@@ -14,6 +15,25 @@ const getImageName = (imageName: string) => {
     });
 
     return imageNameWithoutExt;
+};
+
+const checkIsImageExist = async (
+    imagePath: string,
+    imageName: string
+): Promise<boolean> => {
+    const promise = new Promise<boolean>((resolve, reject) => {
+        const pathWithName = path.join(imagePath, imageName);
+
+        fs.open(pathWithName, (err, fd) => {
+            if (err) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+        });
+    });
+
+    return promise;
 };
 
 const resizeImage = async (
